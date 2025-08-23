@@ -1,41 +1,37 @@
-name: Build Android APK
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="24dp">
 
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+  <TextView
+    android:id="@+id/title"
+    android:text="SKS : Alibi"
+    android:textSize="28sp"
+    android:textStyle="bold"
+    android:gravity="center"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  <TextView
+    android:id="@+id/subtitle"
+    android:text="Bienvenue"
+    android:textSize="16sp"
+    android:layout_marginTop="8dp"
+    android:gravity="center"
+    app:layout_constraintTop_toBottomOf="@id/title"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Install Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Gradle and generate wrapper
-        run: |
-          curl -sL https://services.gradle.org/distributions/gradle-8.7-bin.zip -o gradle.zip
-          unzip -q gradle.zip -d $HOME/gradle
-          echo "$HOME/gradle/gradle-8.7/bin" >> $GITHUB_PATH
-          gradle -v
-          gradle wrapper
-
-      - name: Build Debug APK
-        run: |
-          chmod +x ./gradlew
-          ./gradlew :app:assembleDebug
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: sks-alibi-debug-apk
-          path: application/application/build/outputs/apk/debug/*.apk
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/btnStart"
+    android:text="Commencer la partie"
+    style="@style/Widget.MaterialComponents.Button"
+    android:layout_marginTop="24dp"
+    app:layout_constraintTop_toBottomOf="@id/subtitle"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
