@@ -1,5 +1,3 @@
 rootProject.name = "SKS Alibi"
-
-// On déclare un module nommé "app" et on lui dit où il se trouve VRAIMENT
 include(":app")
 project(":app").projectDir = file("application/application")
