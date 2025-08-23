@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,7 +21,6 @@ jobs:
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
 
-      # Installe Gradle en local et génère le wrapper pour ce repo
       - name: Install Gradle and generate wrapper
         run: |
           curl -sL https://services.gradle.org/distributions/gradle-8.7-bin.zip -o gradle.zip
@@ -31,15 +29,13 @@ jobs:
           gradle -v
           gradle wrapper
 
-      # Compile l'APK du module "application"
       - name: Build Debug APK
         run: |
           chmod +x ./gradlew
-          ./gradlew :application:assembleDebug
+          ./gradlew :app:assembleDebug
 
-      # Publie l'APK généré comme artefact téléchargeable
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: sks-alibi-debug-apk
-          path: application/build/outputs/apk/debug/*.apk
+          path: application/application/build/outputs/apk/debug/*.apk
