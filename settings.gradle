@@ -1,0 +1,2 @@
+rootProject.name = "sks-alibi"
+include(":app")
