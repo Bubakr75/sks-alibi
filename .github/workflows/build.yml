@@ -3,8 +3,6 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -21,26 +19,26 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      # Les runners ont déjà le SDK; on accepte les licences et on installe ce qu'il faut.
-      - name: Install Android SDK packages
-        shell: bash
-        run: |
-          yes | sdkmanager --licenses >/dev/null
-          sdkmanager "platform-tools" \
-                     "platforms;android-34" \
-                     "build-tools;34.0.0"
+      # ✅ Installe le SDK Android + accepte les licences + met sdkmanager dans le PATH
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: |
+            platform-tools
+            platforms;android-34
+            build-tools;34.0.0
 
-      # Installe Gradle 8.7 et active le cache
-      - name: Setup Gradle 8.7
+      # Gradle 8.7 pour AGP 8.5.x
+      - name: Set up Gradle 8.7
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.7
 
-      - name: Build Debug APK
+      - name: Build debug APK
         run: gradle --no-daemon clean :app:assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: sks-alibi-debug-apk
+          name: app-debug
           path: app/build/outputs/apk/debug/*.apk
